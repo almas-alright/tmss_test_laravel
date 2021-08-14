@@ -40,14 +40,13 @@ class TmssTestInstall extends Command
     public function handle()
     {
         $this->info('Installing...Tmss Test Assignemnt..');
-        try {
-            DB::connection()->getPdo();
-            $this->info('...');
-        } catch (\Exception $e) {
-            $this->error('!!database not connected!!');
-            exit();
-        }
-        $this->info('start');
+//        try {
+//            DB::connection()->getPdo();
+//            $this->info('...');
+//        } catch (\Exception $e) {
+//            $this->error('!!database not connected!!');
+//            exit();
+//        }
         Artisan::call('jwt:secret');
         Artisan::call('migrate');
         Artisan::call('migrate', ['--path' => 'database/migrations/assignment_db']);
