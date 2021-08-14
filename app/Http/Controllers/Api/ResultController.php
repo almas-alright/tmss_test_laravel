@@ -27,7 +27,16 @@ class ResultController extends ApiController
     public function index(Request $request, ApiResponseService $apiResponseService): \Illuminate\Http\JsonResponse
     {
         $where = [];
+        if($request->has('student') && $request->get('student') != ""){
+            $where['results.student_id'] = $request->get('student');
+        }
+        if($request->has('department') && $request->get('department') != ""){
+            $where['students.department_id'] = $request->get('department');
+        }
         $results = $this->result->datatable($where);
+        if($request->has('gpa') && $request->get('gpa') != ""){
+            $results->where('results.gpa', '=', $request->get('gpa'));
+        }
         $data = $results->get();
         return $apiResponseService->efflux($data);
     }
@@ -51,7 +60,7 @@ class ResultController extends ApiController
     public function store(Request $request, ApiResponseService $apiResponseService)
     {
         $validator = Validator::make($request->all(), [
-            'student_id' => 'required', 'gpa' => 'required', 'published' => 'required|date'
+            'student_id' => 'required|unique:results,student_id', 'gpa' => 'required', 'published' => 'required|date'
         ],[]);
 
         if($validator->fails()){
@@ -59,7 +68,7 @@ class ResultController extends ApiController
         }
         $data = $this->result->create($validator->validated());
 
-        if ($data->wasChanged()){
+        if ($data->wasRecentlyCreated){
             $studentUpdate = new ResultResource($data);
             return $apiResponseService->efflux($studentUpdate);
         } else {
@@ -100,7 +109,7 @@ class ResultController extends ApiController
     public function update(Request $request, Result $result, ApiResponseService $apiResponseService)
     {
         $validator = Validator::make($request->all(), [
-            'student_id' => 'required', 'gpa' => 'required', 'published' => 'required'
+            'student_id' => 'sometimes|unique:results,student_id', 'gpa' => 'required', 'published' => 'required'
         ],[]);
 
         if($validator->fails()){
