@@ -40,14 +40,14 @@ class TmssTestInstall extends Command
     public function handle()
     {
         $this->info('Installing...Tmss Test Assignemnt..');
-        Artisan::call('jwt:secret');
+//        Artisan::call('jwt:secret');
         Artisan::call('migrate');
         Artisan::call('migrate', ['--path' => 'database/migrations/assignment_db']);
         Artisan::call('migrate', ['--path' => 'database/migrations/api']);
         Artisan::call('db:seed');
-        $this->info('--ইনস্টল হয়ে গেছে--');
         $this->newLine();
         $this->table(['email', 'password'], [['kutsnalmas@gmail.com', 'abcd1234']]);
+        $this->info('--ইনস্টল হয়ে গেছে--');
 
     }
 }
