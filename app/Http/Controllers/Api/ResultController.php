@@ -100,7 +100,7 @@ class ResultController extends ApiController
     public function update(Request $request, Result $result, ApiResponseService $apiResponseService)
     {
         $validator = Validator::make($request->all(), [
-            'student_id' => 'required', 'gpa' => 'required', 'published' => 'required|date'
+            'student_id' => 'required', 'gpa' => 'required', 'published' => 'required'
         ],[]);
 
         if($validator->fails()){
